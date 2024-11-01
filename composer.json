@@ -1,0 +1,57 @@
+{
+    "name": "xrpl/xumm-payments-for-woocommerce",
+    "description": "Accept XRP, EUR, USD, BTC & ETH, using a single plugin with the greatest XRP ledger client (wallet): XUMM!",
+    "type": "project",
+    "require": {
+        "php": "^8.1.0",
+        "xrpl/xumm-sdk-php": "dev-main"
+    },
+    "autoload": {
+        "psr-4": {
+            "Xrpl\\XummForWoocommerce\\": "src/",
+            "Xrpl\\XummForWoocommerce\\Tests\\": "tests/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Andrei Rosseti",
+            "email": "mdxico@gmail.com"
+        },
+        {
+          "name": "Koen Paas",
+          "email": "koen@xrpl-labs.com"
+        },
+        {
+          "name": "Wietse Wind",
+          "email": "w@xrpl-labs.com"
+        }
+    ],
+    "keywords": ["xrp","ripple","xrpl","xumm"],
+    "homepage": "https://xumm.readme.io/",
+    "license": "MIT",
+    "config": {
+      "vendor-dir": "libraries"
+    },
+    "scripts": {
+      "make:tests": "phpunit -c phpunit.xml",
+      "make:check": "phpstan",
+      "build": [
+        "composer install --no-dev --no-scripts --optimize-autoloader",
+        "git archive --prefix=xumm-payments-for-woocommerce/ --format=zip --output xumm-payments-for-woocommerce-$(git rev-parse HEAD).zip $(git rev-parse --abbrev-ref HEAD)",
+        "mkdir xumm-payments-for-woocommerce",
+        "cp -r libraries xumm-payments-for-woocommerce/.",
+        "zip -r xumm-payments-for-woocommerce-$(git rev-parse HEAD).zip xumm-payments-for-woocommerce/libraries",
+        "rm -rf xumm-payments-for-woocommerce"
+      ],
+      "post-install-cmd": [
+        "[ $COMPOSER_DEV_MODE -eq 0 ] || composer make:tests"
+      ]
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^10.0",
+        "10up/wp_mock": "^0.4.2",
+        "brain/monkey": "^2.6",
+        "phpstan/phpstan": "^1.10",
+        "php-stubs/wordpress-tests-stubs": "^6.1"
+    }
+}
